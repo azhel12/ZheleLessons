@@ -1,9 +1,12 @@
+#define F_CPU 8000000
+
+#include <delay.h>
 #include <iopins.h>
 #include <pinlist.h>
 
 using namespace Zhele::IO;
 
-using LedPort = PinList<Pa0, Pa1, Pb1, Pc15>;
+using LedPort = PinList<Pb10, Pa6, Pa2, Pc15>;
 
 int main()
 {
@@ -15,8 +18,14 @@ int main()
     LedPort::SetDriverType<LedPort::DriverType::PushPull>();
     LedPort::SetSpeed<LedPort::Speed::Slow>();
 
-    // Запись значения в порт
-    LedPort::Write(0b101);
+    // 4 диода = 16 комбинаций 
+    for(int i = 0; i < 16; ++i)
+    {
+        // Запись значения в порт
+        LedPort::Write(i);
+        // Пауза
+        Zhele::delay_ms<1000>();
+    }
 
     for(;;)
     {
