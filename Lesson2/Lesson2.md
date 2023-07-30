@@ -80,11 +80,11 @@ enum Speed
 5. `void Clear(DataType value)` - сбрасывает линии по заданной маске (через регистр `BSRR`).
 6. `void Toggle(DataType value)` - инвертирует выводе по заданной маске.
 7. `DataType PinRead()` - читает порт в режиме входа.
-8. `void SetConfiguration(DataType mask, Configuration configuration)` - устанавливает конфигурацию линий по заданной маске.
-9. `void SetSpeed(DataType mask, Speed speed)` - устанавливает скорость линий по заданной маске.
-10. `void SetDriverType(DataType mask, DriverType driver)` - устанавливает режим выхода по заданной маске.
-11. `void SetPullMode(DataType mask, PullMode mode)` - устанавливает подтяжку по заданной маске.
-12. `void AltFuncNumber(DataType mask, uint8_t number)` - устанавливает номер альтернативной функции по заданной маске (недоступно для контроллеров Stm32F1, поскольку у них модуль AFIO работает иначе).
+8. `void SetConfiguration(Configuration configuration, DataType mask)` - устанавливает конфигурацию линий по заданной маске.
+9. `void SetSpeed(Speed speed, DataType mask)` - устанавливает скорость линий по заданной маске.
+10. `void SetDriverType(DriverType driver, DataType mask)` - устанавливает режим выхода по заданной маске.
+11. `void SetPullMode(PullMode mode, DataType mask)` - устанавливает подтяжку по заданной маске.
+12. `void AltFuncNumber(uint8_t number, DataType mask)` - устанавливает номер альтернативной функции по заданной маске (недоступно для контроллеров Stm32F1, поскольку у них модуль AFIO работает иначе).
 13. `void Enable()` - включает тактирование порта.
 14. `void Disable()` - выключает тактирование порта.
 
@@ -95,8 +95,8 @@ enum Speed
 на них высокий уровень.
 ```
 Porta::Enable();
-Porta::SetConfiguration<0b1011, Porta::Configuration::Out>();
-Porta::SetDriverType<0b1011, Porta::DriverType::PushPull>();
+Porta::SetConfiguration<Porta::Configuration::Out, 0b1011>();
+Porta::SetDriverType<Porta::DriverType::PushPull, 0b1011>();
 Porta::Set(0b1011);
 ```
 Полный проект этого примера доступен на [Яндекс.Диске](https://disk.yandex.ru/d/hxZbOAtNNsaUBA)
