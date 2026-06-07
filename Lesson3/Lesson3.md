@@ -187,8 +187,8 @@ uint16_t PinListExpander<TypeList<_PortPins...>>::ExpandPinlistValue(uint16_t va
 
 Объявить виртуальный порт можно следующим образом:
 ```c++
-#include <iopins.h>
-#include <pinlist.h>
+#include <zhele/iopins.h>
+#include <zhele/pinlist.h>
 
 using namespace Zhele::IO;
 
@@ -233,9 +233,9 @@ LedPort::Write(0b101);
 
 Полный код программы ниже:
 ```c++
-#include <delay.h>
-#include <iopins.h>
-#include <pinlist.h>
+#include <zhele/delay.h>
+#include <zhele/iopins.h>
+#include <zhele/pinlist.h>
 
 using namespace Zhele::IO;
 

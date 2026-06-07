@@ -150,9 +150,9 @@
 ## Код
 
 ```c++
-#include <iopins.h>
-#include <timer.h>
-#include <usart.h>
+#include <zhele/iopins.h>
+#include <zhele/timer.h>
+#include <zhele/usart.h>
 
 using UsartConnection = Zhele::Usart1;
 

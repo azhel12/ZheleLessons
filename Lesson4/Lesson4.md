@@ -136,8 +136,8 @@ extern "C"
 Полный код приведен ниже:
 
 ```c++
-#include <iopins.h>
-#include <timer.h>
+#include <zhele/iopins.h>
+#include <zhele/timer.h>
 
 using namespace Zhele::IO;
 using namespace Zhele::Timers;
@@ -210,9 +210,9 @@ LedTimer::SetPeriodAndUpdate(LedTimer::GetPeriod() == 1999.
 Ниже представлен исходный код управления:
 
 ```c++
-#include <iopins.h>
-#include <timer.h>
-#include <dma.h>
+#include <zhele/iopins.h>
+#include <zhele/timer.h>
+#include <zhele/dma.h>
 
 using namespace Zhele;
 using namespace Zhele::IO;

@@ -117,14 +117,13 @@
 Если посмотреть в библиотеку, то данные классы также содержат методы-заглушки
 `uint32_t SrcClockFreq()` (возвращает частоту), `uint32_t GetDivider()`, `uint32_t GetMultipler()` (возвращают `1`). Эти методы добавлены для унификации источников тактовой частоты системной шины, потому что для одного из них - `PLL` - применимы понятия входного сигнала, делителя и множителя.
 
-Класс PLL реализует следующие методы:
-- `uint32_t SetClockFreq(uint32_t freq)` - осуществляет попытку настройки модуля PLL на заданную частоту, автоматически рассчитывая значения делителя и множителя. Возвращает итоговую частоту;
+Класс `PllClock` реализует следующие методы (множитель, делитель и источник известны на этапе компиляции, поэтому соответствующие методы являются шаблонными):
 - `uint32_t SrcClockFreq()` - возвращает частоту входного для PLL сигнала (HSE или HSI, в зависимости от настройки мультиплексора);
 - `uint32_t GetDivider()` - возвращает значение делителя;
-- `void SetDivider(uint32_t divider)` - устанавливает значение делителя;
+- `template<unsigned divider> void SetDivider()` - устанавливает значение делителя;
 - `uint32_t GetMultipler()` - возвращает значение множителя;
-- `void SetMultiplier(uint32_t divider)` - устанавливает значение множителя;
-- `void SelectClockSource(ClockSource divider)` - задает источник тактового сигнала для PLL (тип `ClockSource` является перечислением с двумя возможными значениями: `Internal` и `External`);
+- `template<unsigned multiplier> void SetMultiplier()` - устанавливает значение множителя;
+- `template<ClockSource source> void SelectClockSource()` - задает источник тактового сигнала для PLL (тип `ClockSource` является перечислением с двумя возможными значениями: `Internal` и `External`);
 - `ClockSource GetClockSource()` - возвращает источник тактового сигнала;
 - `uint32_t ClockFreq()` - возвращает итоговую выходную частоту PLL;
 - `bool Enable()` - включает источник тактовой частоты.
@@ -134,8 +133,8 @@
 
 Системную шину реализует класс `SysClock`, который имеет следующий интерфейс:
 - `uint32_t MaxFreq()` - возвращает максимальную разрешенную частоту тактирования системной шины;
-- `ErrorCode SelectClockSource(ClockSource clockSource)` - осуществляет попытку 
-  выбрать источник тактирования системной шины. `ClockSource` - это перечисление с возможными значениями `Internal`, `External`, `Pll`, задающими в качестве
+- `template<ClockSource clockSource> ErrorCode SelectClockSource()` - осуществляет попытку 
+  выбрать источник тактирования системной шины (источник известен на этапе компиляции, поэтому метод шаблонный). `ClockSource` - это перечисление с возможными значениями `Internal`, `External`, `Pll`, задающими в качестве
   источника тактового сигнала HSI, HSE, PLL соответственно. Тип результата - 
   `ErrorCode` - также является перечислением с возможными значениями `Success` 
   (успех), `ClockSourceFailed` (ошибка включения источника), `InvalidClockSource`
@@ -144,9 +143,6 @@
 
 - `uint32_t ClockFreq()` - возвращает итоговую частоту системной шины;
 - `uint32_t SrcClockFreq()` - возвращает частоту источника сигнала (совпадает с частотой самой шины);
-- `uint32_t SetClockFreq(uint32_t freq)` - осуществляет попытку настройки системной
-    шины на заданную частоту, автоматически рассчитывая значения делителя и
-    множителя. Возвращает итоговую частоту;
 
 В зависимости от конкретного контроллера в библиотеке могут быть доступны классы
 остальных шин, для Stm32f103 это `AhbClock`, `Apb1Clock`, `Apb2Clock`, которые имеют следующий интерфейс:
@@ -181,9 +177,9 @@ using Tim2Clock = ClockControl<PeriphClockEnable1, RCC_APB1ENR_TIM2EN, Apb1Clock
 значения предделителя и регистра перезагрузки таймера. Например, установить предделитель в значение _12000_, а регистр перезагрузки в _6000_.
 
 ```c++
-#include <clock.h>
-#include <iopins.h>
-#include <timer.h>
+#include <zhele/clock.h>
+#include <zhele/iopins.h>
+#include <zhele/timer.h>
 
 using namespace Zhele::Clock;
 using namespace Zhele::IO;
@@ -196,13 +192,13 @@ int main()
 {
     // Настройка тактирования
     // Выбираем HSE как источник для PLL
-    PllClock::SelectClockSource(PllClock::External);
+    PllClock::SelectClockSource<PllClock::ClockSource::External>();
     // Устанавливаем коэффициент умножения
-	PllClock::SetMultiplier(9);
+	PllClock::SetMultiplier<9>();
 	// Устанавливаем делитель шины APB1 (ее макс.частота равно 36 МГц)
-	Apb1Clock::SetPrescaler(Apb1Clock::Div2);
+	Apb1Clock::SetPrescaler<Apb1Clock::Div2>();
 	// Выбираем PLL как источник для тактирования системной шины
-	SysClock::SelectClockSource(SysClock::Pll);
+	SysClock::SelectClockSource<SysClock::Pll>();
 
     // Настройка светодиода
     Led::Port::Enable();

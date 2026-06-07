@@ -243,8 +243,8 @@
 например, яркостью светодиода.
 
 ```c++
-#include <iopins.h>
-#include <timer.h>
+#include <zhele/iopins.h>
+#include <zhele/timer.h>
 
 using namespace Zhele::IO;
 using namespace Zhele::Timers;

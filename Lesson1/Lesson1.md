@@ -53,7 +53,7 @@ Stm32.
 ![Download toolchain](img/5.jpg)
 7. Распаковать скачанный архив и скопировать с заменой директории bin, share, arm-none-eabi и lib в _C:\\Users\\%Username%\\.platformio\\packages\\toolchain-gccarmnoneeabi\\_ (В некоторых версиях Platofrmio эта директория может иметь другое имя: _toolchain-gccarmnoneeabi@VERSION_). **Внимание!** Не удаляйте файлы .piopm и package.json.
 ![Copy new toolchain](img/6.jpg)
-8. Скопировать директорию **Zhele/Zhele** из репозитория в директорию **lib** проекта.
+8. Скопировать директорию **Zhele/include/zhele** из репозитория в директорию **lib** проекта (то есть в проекте должна получиться директория **lib/zhele** с заголовочными файлами библиотеки). Благодаря этому подключение заголовков в коде осуществляется через префикс **zhele**, например `#include <zhele/iopins.h>`.
 ![Copy Zhele](img/7.jpg)
 9. В директорию **src** скопировать любой пример или создать новый **.cpp** файл. Например, файл **LedControl.cpp**
 ![LedControl](img/8.jpg)
